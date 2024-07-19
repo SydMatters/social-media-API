@@ -17,27 +17,28 @@ export class MessagesController {
 
   // create a message
   @Post()
-  createMessage(
+  public async createMessage(
     @Body() createMessageDto: CreateMessageDto,
   ): Promise<MessageEntity> {
-    return this.messagesService.createMessage(createMessageDto);
+    return await this.messagesService.createMessage(createMessageDto);
   }
 
   // find messages by chat id
   @Get(':chatId')
-  findMessagesByChat(@Param('chatId') chatId: string): Promise<void> {
-    return this.messagesService.findMessagesByChat(chatId);
-  }
-
-  // delete a message by id
-  @Delete(':id')
-  deleteMessage(@Param('id') messageId: string): Promise<void> {
-    return this.messagesService.deleteMessage(messageId);
+  public async findMessagesByChat(@Param('chatId') chatId: string): Promise<void> {
+    return await this.messagesService.findMessagesByChat(chatId);
   }
 
   //find message by user id
   @Get(':userId')
-  async findMessagesByUser(@Param('userId') userId: string): Promise<void> {
-    return this.messagesService.findMessagesByUser(userId);
+  public async findMessagesByUser(@Param('userId') userId: string): Promise<void> {
+    return await this.messagesService.findMessagesByUser(userId);
   }
+  
+  // delete a message by id
+  @Delete(':id')
+  public async deleteMessage(@Param('id') messageId: string): Promise<void> {
+    return await this.messagesService.deleteMessage(messageId);
+  }
+
 }

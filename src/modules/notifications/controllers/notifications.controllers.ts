@@ -8,7 +8,7 @@ import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class NotificationsController {
   constructor(private notificationsService: NotificationsService) {}
 
-  // create a notification
+  //swagger
   @Post()
   public async createNotification(
     @Body() createNotificationDto: CreateNotificationDto,

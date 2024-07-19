@@ -15,20 +15,20 @@ export class MessagesService {
   ) {}
 
   // Function to create a new message
-  createMessage(createMessageDto: DeepPartial<CreateMessageDto>) {
+  public async createMessage(createMessageDto: DeepPartial<CreateMessageDto>) {
     try {
       if (!createMessageDto) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       const message = this.messageRepository.create(createMessageDto);
-      return this.messageRepository.save(message);
+      return await this.messageRepository.save(message);
     } catch (err) {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
     }
   }
 
   // Function to find messages by user
-  async findMessagesByUser(userId: string): Promise<void> {
+  public async findMessagesByUser(userId: string): Promise<void> {
     try {
       if (!userId) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
@@ -40,7 +40,7 @@ export class MessagesService {
   }
 
   // Function to find messages by user
-  async findMessagesByChat(chatId: string): Promise<void> {
+  public async findMessagesByChat(chatId: string): Promise<void> {
     // check the promise with the messagesEntity
     try {
       if (!chatId) {
@@ -53,7 +53,7 @@ export class MessagesService {
   }
 
   // Function to delete a message by ID
-  async deleteMessage(messageId: string): Promise<void> {
+  public async deleteMessage(messageId: string): Promise<void> {
     try {
       if (!messageId) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
