@@ -13,7 +13,7 @@ export class NotificationsService {
   ) {}
 
   // Function to create a new notification
-  async createNotification(
+  public async createNotification(
     createNotificationDto: CreateNotificationDto,
   ): Promise<NotificationEntity> {
     const { emisorUser, receptorUser, status, action, title, description } =
@@ -38,7 +38,7 @@ export class NotificationsService {
   }
 
   // Function to delete a notification by ID
-  async deleteNotification(notificationId: string): Promise<void> {
+  public async deleteNotification(notificationId: string): Promise<void> {
     try {
       if (!notificationId) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
@@ -50,7 +50,7 @@ export class NotificationsService {
   }
 
   // Function to find notifications by user ID
-  async findNotificationsByUser(userId: UserEntity): Promise<void> {
+  public async findNotificationsByUser(userId: UserEntity): Promise<void> {
     try {
       if (!userId) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);

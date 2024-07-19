@@ -3,28 +3,29 @@ import { NotificationsService } from '../services/notifications.service';
 import { CreateNotificationDto } from '../dto/create-notification.dto';
 import { NotificationEntity } from '../entities/notification.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
+import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('notifications')
 export class NotificationsController {
   constructor(private notificationsService: NotificationsService) {}
 
   // create a notification
   @Post()
-  createNotification(
+  public async createNotification(
     @Body() createNotificationDto: CreateNotificationDto,
   ): Promise<NotificationEntity> {
-    return this.notificationsService.createNotification(createNotificationDto);
+    return await this.notificationsService.createNotification(createNotificationDto);
   }
 
   //delete a notification by the notification id
   @Delete(':id')
-  deleteNotification(@Param('id') notificationId: string): Promise<void> {
-    return this.notificationsService.deleteNotification(notificationId);
+  public async deleteNotification(@Param('id') notificationId: string): Promise<void> {
+    return await this.notificationsService.deleteNotification(notificationId);
   }
   // find a notification by the user id
   @Get('user/:userId')
-  async findNotificationsByUser(
+  public async findNotificationsByUser(
     @Param('userId') userId: UserEntity,
   ): Promise<void> {
-    await this.notificationsService.findNotificationsByUser(userId);
+    return await this.notificationsService.findNotificationsByUser(userId);
   }
 }
