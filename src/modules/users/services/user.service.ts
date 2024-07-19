@@ -3,60 +3,89 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; 
 import { UserEntity } from '../entities/user.entity';
 import { UserDto } from '../dto/create-user.dto';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import * as bycryptjs from 'bcryptjs';
+import { AuthDTO } from 'src/modules/auth/dto/auth.dto';
+import { catchError } from 'rxjs';
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>,
-        private readonly jwtService: JwtService,    
-        private readonly configService: ConfigService
-    ) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
 
-    // Here is the services of user 
+  async createUser(userDto: UserDto) {
+    try {
+      const userEmail = this.userRepository.findOne({ where: { email: userDto.email } })
+      const userName = this.userRepository.findOne({ where: { username: userDto.username } })
+      if (userEmail || userName) {
+        return;
+      }
 
-    // first create user
-        // IN this service i need a function to create a user
-    // the name is createUser and the parameter is UserDto
+      userDto.password = await bycryptjs.hash(userDto.password, 20);
 
-    async createUser(user: UserDto) {
+      const user = this.userRepository.create(userDto);
+      return await this.userRepository.save(user);
+    } catch (error) {
+      console.log(error);
     }
+  }
 
-    // second login user
-    // the name is loginUser and the parameter is UserDto
+ async getUsers () {
+   try {
+     return await this.userRepository.find()
+   } catch (error) {
+     console.log(error)
+   }
+ }
 
-    async loginUser(user: UserDto) {
+  async getUserById (userId: string) {
+    try {
+      return await this.userRepository.findOne({ where: { id: userId } })
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    // logaut user
-    // the name is logoutUser and the parameter is UserDto
-
-    async logoutUser(user: UserDto) {
+  async getUserByUserName (userName: string) {
+    try {
+      return await this.userRepository.findOne({ where: { username: userName } })
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    // get user 
-    // the name is getUser and the parameter is UserDto
-
-    async getUser(user: UserDto) {
+  async getByEmail(email: string) {
+    try {
+      return await this.userRepository.findOne({ where: { email: email } })
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    // modify user
-    // the name is modifyUser and the parameter is UserDto
-
-    async modifyUser(user: UserDto) {
+  async modifyProfile(userDto: UserDto) {
+    try {
+      const user = this.userRepository.create(userDto)
+      return await this.userRepository.save(user)
+    } catch (error) {
+      console.log(error)
     }
-
-    // delete user
-    // the name is deleteUser and the parameter is UserDto
-
-    async deleteUser(user: UserDto) {
+  }
+  
+  async setDarkMode(userDto: UserDto) {
+    try {
+      userDto.darkMode = !userDto.darkMode
+      await this.userRepository.update({ id: userDto.id }, { darkMode: userDto.darkMode });
+    } catch (error) {
+      console.log(error)
     }
-
-    // modify the state of a darkMode 
-
-    async modifyDarkMode(user: UserDto) {
+  }
+  
+  async deleteUser(id: string) {
+    try {
+      return await this.userRepository.delete(id)
+    } catch (error) {
+      console.log(error)
     }
-}
-
+  }
+};

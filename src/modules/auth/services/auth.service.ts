@@ -1,35 +1,61 @@
-/* // src/modules/auth/services/auth.service.ts
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { UserEntity } from '../../users/entities/user.entity';
-import { AuthDto } from '../dto/auth.dto';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
+import { UserEntity } from 'src/modules/users/entities/user.entity';
+import { UserService } from 'src/modules/users/services/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    private readonly jwtService: JwtService,
-  ) {}
-  // Function to login a user and return a JWT token
-  // login(authDto: AuthDto): Promise<{ accessToken: string }> { ... }
+  constructor(private readonly userService: UserService) { }
 
-  // all this functions are used for the authentication and is vinculated with the login function
-  // doesn't need to be exported or you can manage it directly in function, only is idea for this project
+  public async validateUser(email: string, password: string): Promise<UserEntity | null> {
+    try {
+      const userByEmail = await this.userService.getByEmail(email);
 
-  // Function to register a new user and return a JWT token
-  // register(authDto: AuthDto): Promise<{ accessToken: string }> { ... }
+      if (userByEmail) {
+        const match = await bcrypt.compare(password, userByEmail.password);
+        if (match) return userByEmail;
+      }
 
-  // Function to create a JWT token
-  // createJwtToken(payload: JwtPayload): string { ... }
+      return null;
+    } catch (error) {
+      console.error('Error validating user:', error);
+      throw new UnauthorizedException('Invalid credentials');
+    }
+  }
 
-  // Function to validate a JWT token
-  // validateJwtToken(token: string): JwtPayload { ... }
+  public signJWT({
+    payload,
+    secret,
+    expires,
+  }: {
+    payload: jwt.JwtPayload;
+    secret: string;
+    expires: string;
+  }): string {
+    return jwt.sign(payload, secret, { expiresIn: expires });
+  }
 
-  // Function to refresh a JWT token
-  // refreshJwtToken(user: UserEntity): Promise<{ accessToken: string }> { ... }
+  public async generateJWT(user: UserEntity): Promise<{ accessToken: string; user: UserEntity }> {
+    try {
+      const getUser = await this.userService.getUserById(user.id);
+      if (!getUser) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      const payload: jwt.JwtPayload = { id: getUser.id };
+
+      return {
+        accessToken: this.signJWT({
+          payload,
+          secret: "asjdjkashdjkashdjkha", // Usa una variable de entorno para el secreto
+          expires: '1h',
+        }),
+        user: getUser,
+      };
+    } catch (error) {
+      console.error('Error generating JWT:', error);
+      throw new UnauthorizedException('Failed to generate JWT');
+    }
+  }
 }
- */

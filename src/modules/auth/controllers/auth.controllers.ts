@@ -1,17 +1,46 @@
-/* import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+
+import {
+  Body,
+  Controller,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { AuthDTO } from '../dto/auth.dto';
 import { AuthService } from '../services/auth.service';
-import { AuthGuard } from '../guards/jwt.guard';
-import { AuthDto } from '../dto/auth.dto';
+import { ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('auth')
+@ApiTags("Auth")
+@Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
-  // @Post('login')
-  // login(@Body() authDto: AuthDto): Promise<{ accessToken: string }> { ... }
+  @Post('login')
+  @ApiHeader({
+    name: 'Token',
+    description: 'Token de autenticación',
+    required: false
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Inicio de sesión exitoso.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Datos no válidos.',
+  })
+  
+  async login(@Body() { email, password }: AuthDTO) {
+    const userValidate = await this.authService.validateUser(
+      email,
+      password,
+    );
 
-  // @UseGuards(AuthGuard)
-  // @Post('refresh')
-  // refresh(@Req() req): Promise<{ accessToken: string }> { ... }
+    if (!userValidate) {
+      throw new UnauthorizedException('Data not valid');
+    }
+
+    const jwt = await this.authService.generateJWT(userValidate);
+
+    return jwt;
+  }
 }
- */

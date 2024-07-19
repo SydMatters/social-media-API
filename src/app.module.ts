@@ -9,6 +9,7 @@ import { MessagesModule } from './modules/messages/messages.module';
 import { FollowersModule } from './modules/followers/followers.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -46,5 +47,6 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     FollowersModule,
     NotificationsModule,
   ],
+  
 })
 export class AppModule {}

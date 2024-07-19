@@ -1,8 +1,9 @@
 // here you must tyo create the user dto
 
-import { IsEmail, IsNotEmpty, IsNumber, IsPositive, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, MinLength } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { UserEntity } from '../entities/user.entity';
+import { Gender } from '../entities/user.entity';
 
 export class UserDto extends PartialType(UserEntity) {
 
@@ -27,8 +28,8 @@ export class UserDto extends PartialType(UserEntity) {
   @IsPositive()
   age?: number;
 
-  @IsString()
-  gender?: string;
+  @IsEnum(Gender)
+  gender?: Gender;
 
   @IsString()
   profileImage?: string;

@@ -4,6 +4,12 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other'
+}
+
 @Entity('User')
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -24,8 +30,12 @@ export class UserEntity {
   @Column({ type: 'int', nullable: true })
   age?: number;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  gender?: string;
+  @Column({
+    type: 'enum',
+    enum: Gender,
+    nullable: true
+  })
+  gender?: Gender;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   profileImage?: string;

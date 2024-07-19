@@ -25,7 +25,11 @@ export class LikesService {
   // Function to find all likes
   findAllLikes(): Promise<LikeEntity[]> {
     try {
-      return this.likeRepository.find();
+      const likes = this.likeRepository.find();
+      if(!likes){
+        throw new Error('No hay likes');
+      }
+      return likes;
     } catch (error) {
       console.log(error);
     }
@@ -35,9 +39,11 @@ export class LikesService {
   deleteLike(likeId: string): Promise<void> {
 
     try{
-      return this.likeRepository.delete(likeId).then(() => {
-        return;
-      });
+      const like = this.likeRepository.delete(likeId).then(() => {return});
+      if(!like){
+        throw new Error('No se encontro el like');
+      }
+      return like
     }
     catch(error){
       console.log(error);
@@ -48,7 +54,11 @@ export class LikesService {
   findLikesByPost(postId: PostEntity): Promise<LikeEntity[]> {
 
     try{
-      return this.likeRepository.find({ where: { postId: postId } });
+      const like =  this.likeRepository.find({ where: { postId: postId } });
+      if(!like){
+        throw new Error('No se encontraron likes');
+      }
+      return like;
     }
     catch(error){
       console.log(error);
@@ -58,7 +68,11 @@ export class LikesService {
   // Function to find likes by user ID
   findLikesByUser(userId: UserEntity): Promise<LikeEntity[]> {
     try {
-      return this.likeRepository.find({ where: { userId: userId } });
+      const userLikes = this.likeRepository.find({ where: { userId: userId } });
+      if (!userLikes) {
+        throw new Error('No se encontraron likes');
+      }
+      return userLikes;
     } catch (error) {
       console.log(error);
     }
