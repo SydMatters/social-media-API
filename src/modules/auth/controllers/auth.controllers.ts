@@ -9,6 +9,7 @@ import { AuthDTO } from '../dto/auth.dto';
 import { AuthService } from '../services/auth.service';
 import { ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+
 @ApiTags("Auth")
 @Controller()
 export class AuthController {
@@ -28,7 +29,6 @@ export class AuthController {
     status: 401,
     description: 'Datos no válidos.',
   })
-  
   async login(@Body() { email, password }: AuthDTO) {
     const userValidate = await this.authService.validateUser(
       email,

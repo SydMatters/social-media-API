@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm'; 
+import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { UserDto } from '../dto/create-user.dto';
 import * as bycryptjs from 'bcryptjs';
@@ -13,7 +13,7 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
   async createUser(userDto: UserDto) {
     try {
@@ -21,10 +21,10 @@ export class UserService {
 
       const userName = await this.userRepository.findOne({ where: { username: userDto.username } })
 
-      if(userEmail){
+      if (userEmail) {
         throw new Error('Email in use')
       }
-      if(userName){
+      if (userName) {
         throw new Error('Name in use')
       }
       if (userEmail || userName) {
@@ -41,23 +41,23 @@ export class UserService {
     }
   }
 
- async getUsers () {
-   try {
-     const users = await this.userRepository.find()
-     if(!users){
-      throw new Error('Users not found')
-     }
-     return users
-   } catch (error) {
-     console.log(error)
-     throw new Error(error);
-   }
- }
+  async getUsers() {
+    try {
+      const users = await this.userRepository.find()
+      if (!users) {
+        throw new Error('Users not found')
+      }
+      return users
+    } catch (error) {
+      console.log(error)
+      throw new Error(error);
+    }
+  }
 
-  async getUserById (userId: string) {
+  async getUserById(userId: string) {
     try {
       const user = await this.userRepository.findOne({ where: { id: userId } })
-      if(!user){
+      if (!user) {
         throw new Error('User not found')
       }
       return user
@@ -67,10 +67,10 @@ export class UserService {
     }
   }
 
-  async getUserByUserName (userName: string) {
+  async getUserByUserName(userName: string) {
     try {
       const user = await this.userRepository.findOne({ where: { username: userName } })
-      if(!user){
+      if (!user) {
         throw new Error('User not found')
       }
       return user;
@@ -83,7 +83,7 @@ export class UserService {
   async getByEmail(email: string) {
     try {
       const user = await this.userRepository.findOne({ where: { email: email } })
-      if(!user){
+      if (!user) {
         throw new Error('User not found')
       }
       return user;
@@ -97,13 +97,13 @@ export class UserService {
 
     console.log("hello world")
     const user = await this.userRepository.findOne({ where: { id: userId } });
-    if(!user){
+    if (!user) {
       throw new Error('User not found')
     }
     Object.assign(user, userDto);
     return await this.userRepository.save(user);
   }
-  
+
   async setDarkMode(userId: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
@@ -113,15 +113,15 @@ export class UserService {
     await this.userRepository.save(user);
     return user.darkMode;
   }
-  
-  
+
+
   async deleteUser(id: string) {
     try {
       const user = await this.userRepository.delete(id)
       if (!user) {
         throw new Error('User not found');
-    }
-    return user
+      }
+      return user
     } catch (error) {
       console.log(error)
       throw new Error(error);
