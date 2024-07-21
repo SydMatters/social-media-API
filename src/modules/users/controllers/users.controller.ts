@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { UserService } from '../services/user.service';
 import { UserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
-import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
 @ApiTags("User")
@@ -41,7 +41,6 @@ export class UsersController {
 })
   @Get('/users')
   getUsers(): Promise<UserEntity[]> {
-    console.log('llega?')
     try {
       return this.userService.getUsers();
     } catch (error) {

@@ -9,9 +9,9 @@ import { UserEntity } from 'src/modules/users/entities/user.entity';
 export class NotificationsService {
   constructor(
     @InjectRepository(NotificationEntity)
-    private notificationRepository: Repository<NotificationEntity>,
+    private notificationRepository: Repository<NotificationEntity>, // Inject Notification repository
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private userRepository: Repository<UserEntity>, // Inject User repository
   ) {}
 
   // Function to create a new notification

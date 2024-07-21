@@ -9,12 +9,13 @@ import { UserEntity } from '../users/entities/user.entity';
 
 @Module({
   imports: [
+    // Import TypeORM modules for NotificationEntity and UserEntity
     TypeOrmModule.forFeature([NotificationEntity, UserEntity]), 
-    AuthModule,
-    UsersModule, 
+    AuthModule, // Import authentication module
+    UsersModule, // Import users module
   ],
-  controllers: [NotificationsController],
-  providers: [NotificationsService],
-  exports: [NotificationsService],
+  controllers: [NotificationsController], // Register NotificationsController
+  providers: [NotificationsService], // Register NotificationsService
+  exports: [NotificationsService], // Export NotificationsService for use in other modules
 })
 export class NotificationsModule {}

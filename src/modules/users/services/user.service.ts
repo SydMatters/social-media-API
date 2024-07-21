@@ -92,6 +92,7 @@ export class UserService {
     if(!user){
       throw new Error('User not found')
     }
+    userDto.password = await bycryptjs.hash(userDto.password, 10);
     Object.assign(user, userDto);
     return await this.userRepository.save(user);
   }
