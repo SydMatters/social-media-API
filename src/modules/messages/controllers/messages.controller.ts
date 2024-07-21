@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
   Param,
   Body,
@@ -11,7 +10,7 @@ import {
 import { MessagesService } from '../services/messages.service';
 import { CreateMessageDto } from '../dto/create-message.dto';
 import { MessageEntity } from '../entities/message.entity';
-import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
 @ApiTags('Messages')
@@ -19,7 +18,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
-  // create a message
+  // Endpoint to create a new message
   @ApiResponse({
     status: 201,
     description: 'Message sent.',
@@ -40,7 +39,7 @@ export class MessagesController {
     return this.messagesService.createMessage(createMessageDto);
   }
 
-  // find messages by chat id
+  // Endpoint to find messages by chat ID
   @ApiResponse({
     status: 200,
     description: 'Get all messages.',
@@ -63,7 +62,7 @@ export class MessagesController {
     return this.messagesService.findMessagesByChat(chatId);
   }
 
-  // delete a message by id
+  // Endpoint to delete a message by ID
   @ApiResponse({
     status: 200,
     description: 'Message deleted.',
@@ -86,7 +85,7 @@ export class MessagesController {
     return this.messagesService.deleteMessage(messageId);
   }
 
-  //find message by user id
+  // Endpoint to find messages by user ID
   @ApiResponse({
     status: 200,
     description: 'Get all messages.',

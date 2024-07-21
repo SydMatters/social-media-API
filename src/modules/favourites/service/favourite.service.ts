@@ -11,36 +11,51 @@ export class FavouritesService {
     private readonly favouritesRepository: Repository<FavouritesEntity>
   ) { }
 
+  /**
+   * Add a new favourite.
+   * @param FavouritesDto - Data transfer object for the favourite.
+   * @returns The created FavouritesEntity.
+   */
   public async addFavourite(FavouritesDto: FavouritesDto): Promise<FavouritesEntity> {
     try {
-      const favourite = this.favouritesRepository.create(FavouritesDto)
-      return this.favouritesRepository.save(favourite)
+      const favourite = this.favouritesRepository.create(FavouritesDto);
+      return await this.favouritesRepository.save(favourite);
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message); // Include .message for more detailed error info
     }
   }
 
-  public async deleteFavourite(id: FavouritesDto): Promise<DeleteResult | undefined> {
+  /**
+   * Delete a favourite by ID.
+   * @param id - The ID of the favourite to delete.
+   * @returns The result of the delete operation.
+   */
+  public async deleteFavourite(id: string): Promise<DeleteResult | undefined> {
     try {
       const result = await this.favouritesRepository.delete(id);
       if (result.affected === 0) {
         throw new Error('Favourite not found');
       }
-      return result
+      return result;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message); // Include .message for more detailed error info
     }
   }
 
-  async getFavourites(userId: FavouritesDto['userId']): Promise<FavouritesEntity[]> {
+  /**
+   * Get all favourites for a given user.
+   * @param userId - The ID of the user whose favourites to retrieve.
+   * @returns An array of FavouritesEntity.
+   */
+  async getFavourites(userId: string): Promise<FavouritesEntity[]> {
     try {
-      const favourites = this.favouritesRepository.find({ where: { userId: userId } })
-      if (!favourites) {
+      const favourites = await this.favouritesRepository.find({ where: { userId } });
+      if (favourites.length === 0) {
         throw new Error('Favourites not found');
       }
       return favourites;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message); // Include .message for more detailed error info
     }
   }
 }

@@ -8,26 +8,26 @@ import {
 
 export class CreateMessageDto {
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty() // Documents this property in Swagger
+  @IsString() // Ensures that messageContent is a string
+  @IsNotEmpty() // Ensures that messageContent is not empty
   messageContent: string;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty() // Documents this property in Swagger
+  @IsString() // Ensures that media is a string
   media: string;
 
-  @ApiProperty()
-  @IsDate()
+  @ApiProperty() // Documents this property in Swagger
+  @IsDate() // Ensures that creationTime is a date
   creationTime: Date;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty() // Documents this property in Swagger
+  @IsString() // Ensures that user is a string
+  @IsNotEmpty() // Ensures that user is not empty
   user: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty() // Documents this property in Swagger
+  @IsString() // Ensures that chatID is a string
+  @IsNotEmpty() // Ensures that chatId is not empty
   chatId: string;
 }

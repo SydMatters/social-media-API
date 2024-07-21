@@ -12,8 +12,8 @@ import { FavouritesDto } from '../dto/create-favourite.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
-@ApiTags('Favourites')
-@Controller('favorites')
+@ApiTags('Favourites') // Tags for API documentation
+@Controller('favorites') // Base route for this controller
 export class FavouritesController {
   constructor(private readonly FavouritesService: FavouritesService) {}
 
@@ -29,8 +29,8 @@ export class FavouritesController {
     status: 401,
     description: 'Unauthorized',
   })
-  @Post('/add')
-  @UseGuards(JwtAuthGuard)
+  @Post('/add') // Route to add a favorite
+  @UseGuards(JwtAuthGuard) // Protects route with JWT authentication guard
   public async addFavourite(@Body() body: FavouritesDto) {
     return await this.FavouritesService.addFavourite(body);
   }
@@ -51,8 +51,8 @@ export class FavouritesController {
     status: 404,
     description: 'Favorite not found.',
   })
-  @Delete('/delete/:id')
-  @UseGuards(JwtAuthGuard)
+  @Delete('/delete/:id') // Route to delete a favorite by ID
+  @UseGuards(JwtAuthGuard) // Protects route with JWT authentication guard
   public async deleteFavourite(@Param('id') id: any) {
     return await this.FavouritesService.deleteFavourite(id);
   }
@@ -73,8 +73,8 @@ export class FavouritesController {
     status: 404,
     description: 'Favourites not found.',
   })
-  @Get('/user/:userId')
-  @UseGuards(JwtAuthGuard)
+  @Get('/user/:userId') // Route to get all favorites for a specific user
+  @UseGuards(JwtAuthGuard) // Protects route with JWT authentication guard
   public async getFavourites(@Param('userId') userId: string) {
     return await this.FavouritesService.getFavourites(userId);
   }
