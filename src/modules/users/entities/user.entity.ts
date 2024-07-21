@@ -1,9 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { PostEntity } from '../../posts/entities/post.entity';
 import { FavouritesEntity } from '../../favourites/entities/favourites.entity';
 import { ChatEntity } from '../../chats/entities/chat.entity';
@@ -15,7 +10,7 @@ import { LikeEntity } from '../../likes/entities/like.entity';
 export enum Gender {
   MALE = 'male',
   FEMALE = 'female',
-  OTHER = 'other'
+  OTHER = 'other',
 }
 
 @Entity('User')
@@ -42,7 +37,6 @@ export class UserEntity {
     type: 'enum',
     enum: Gender,
     nullable: true,
-    default: null, 
   })
   gender?: Gender;
 
@@ -79,27 +73,33 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   lastLogoutDate?: string;
 
-  @OneToMany(() => PostEntity, post => post.user)
+  @OneToMany(() => PostEntity, (post) => post.userId)
   posts: PostEntity[];
 
-  @OneToMany(() => FavouritesEntity, favourites => favourites.userId)
+  @OneToMany(() => FavouritesEntity, (favourites) => favourites.userId)
   favourites: FavouritesEntity[];
 
-  @OneToMany(() => ChatEntity, chat => chat.user1)
+  @OneToMany(() => ChatEntity, (chat) => chat.user1)
   chat1: ChatEntity[];
 
-  @OneToMany(() => ChatEntity, chat => chat.user2)
+  @OneToMany(() => ChatEntity, (chat) => chat.user2)
   chat2: ChatEntity[];
 
-  @OneToMany(() => MessageEntity, message => message.user)
+  @OneToMany(() => MessageEntity, (message) => message.user)
   messages: MessageEntity[];
 
-  @OneToMany(() => NotificationEntity, notification => notification.receptorUser)
+  @OneToMany(
+    () => NotificationEntity,
+    (notification) => notification.receptorUser,
+  )
   notifications: NotificationEntity[];
 
-  @OneToMany(() => FollowersEntity, follower => follower.follower)
-  followers: FollowersEntity[];
+  @OneToMany(() => FollowersEntity, (follower) => follower.follower)
+  follower: FollowersEntity[];
 
-  @OneToMany(() => LikeEntity, like => like.user)
-  likes: LikeEntity[];
+  @OneToMany(() => FollowersEntity, (follower) => follower.following)
+  following: FollowersEntity[];
+
+  /* @OneToMany(() => LikeEntity, like => like.user)
+  likes: LikeEntity[]; */
 }

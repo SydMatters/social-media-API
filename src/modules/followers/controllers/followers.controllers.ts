@@ -25,13 +25,13 @@ export class FollowersController {
   @Post()
   @UseGuards(JwtAuthGuard)
   createFollower(@Body() createFollowerDto: CreateFollowerDto): Promise<FollowersEntity> {
+    // Create a new follower relationship
     return this.followersService.createFollower(createFollowerDto);
   }
 
-  // here we can to find a users that i am following
   @ApiResponse({
     status: 200,
-    description: 'Get all users that i am following.',
+    description: 'Get all users that I am following.',
   })
   @ApiResponse({
     status: 400,
@@ -48,10 +48,10 @@ export class FollowersController {
   @Get('followings/:followerId')
   @UseGuards(JwtAuthGuard)
   findFollowingsById(@Param('followerId') followerId: string): Promise<String[]> {
+    // Find all users that the specified user is following
     return this.followersService.findFollowingsById(followerId);
   }
 
-  // here we can find all followers that follow me 
   @ApiResponse({
     status: 200,
     description: 'Get all followers that follow me.',
@@ -71,6 +71,7 @@ export class FollowersController {
   @Get('/user/:followingId')
   @UseGuards(JwtAuthGuard)
   findFollowersByUser(@Param('followingId') followingId: string): Promise<String[]> {
+    // Find all users that follow the specified user
     return this.followersService.findFollowersByUser(followingId);
   }
 
@@ -93,6 +94,7 @@ export class FollowersController {
   @Delete('/delete/:followerId')
   @UseGuards(JwtAuthGuard) 
   deleteFollower(@Param('followerId') followerId: string): Promise<String> {
+    // Remove a follower relationship
     return this.followersService.deleteFollower(followerId);
   }
 }

@@ -1,20 +1,19 @@
-// here you must to create a follower dto
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsDate } from 'class-validator';
+import { IsNotEmpty, IsString, IsDate, IsOptional } from 'class-validator';
+
 export class CreateFollowerDto {
+  @ApiProperty() // Documents this property in Swagger
+  @IsString() // Validates that the followerId field is a string
+  @IsNotEmpty() // Validates that the followerId field is not empty
+  followerId: string; // ID of the follower
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  followerId: string;
+  @ApiProperty() // Documents this property in Swagger
+  @IsString() // Validates that the followingId field is a string
+  @IsNotEmpty() // Validates that the followingId field is not empty
+  followingId: string; // ID of the user being followed
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  followingId: string;
-
-  @ApiProperty()
-  @IsDate()
-  followDate?: Date;
+  @ApiProperty() // Documents this property in Swagger
+  @IsDate() // Validates that the followersDate field is a Date
+  @IsOptional() // Validates that the followDate field is optional
+  followDate?: Date; // Optional date when the follow occurred
 }
-  

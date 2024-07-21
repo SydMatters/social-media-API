@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
 import { PostEntity } from '../../posts/entities/post.entity';
 
@@ -10,16 +10,18 @@ export class LikeEntity {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) // Column for storing the creation date of the like
   creationDate: Date;
-  
-  @Column() // Column for storing the ID of the post that was liked
-  postId: string;
-  
-  @Column() // Column for storing the ID of the user who liked the post
-  userId: string;
-  
-  @ManyToOne(() => UserEntity, (user) => user.userId, { cascade: true, onDelete: 'CASCADE' }) // Many-to-One relationship with UserEntity
-  user: UserEntity;
-  
-  @ManyToOne(() => PostEntity, (post) => post.postId, { cascade: true, onDelete: 'CASCADE' }) // Many-to-One relationship with PostEntity
-  post: PostEntity;
+
+  @ManyToOne(() => UserEntity, (user) => user.userId, {
+    cascade: true, // Enable cascade operations (insert, update, delete)
+    onDelete: 'CASCADE', // Delete likes when the associated user is deleted
+  })
+  @JoinColumn({ name: 'userId' }) // Specify the column name in the database
+  userId: UserEntity;
+
+  @ManyToOne(() => PostEntity, (post) => post.postId, {
+    cascade: true, // Enable cascade operations (insert, update, delete)
+    onDelete: 'CASCADE', // Delete likes when the associated post is deleted
+  })
+  @JoinColumn({ name: 'postId' }) // Specify the column name in the database
+  postId: PostEntity;
 }
